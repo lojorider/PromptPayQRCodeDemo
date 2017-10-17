@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context="com.mojozoft.promptpay_qrcode_demo.MainActivity">
+
+
+    <EditText
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/pp_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="เบอร์โทรศัพท์ หรือ เลขบัตรประชาชน"
+        android:inputType="number"
+        tools:layout_editor_absoluteY="511dp" />
+
+    <EditText
+        app:layout_constraintTop_toBottomOf="@id/pp_id"
+        android:id="@+id/money"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="จำนวนเงิน (ไม่ระบุก็ได้)"
+        android:inputType="numberDecimal"
+        tools:layout_editor_absoluteY="511dp" />
+
+
+    <Button
+        android:id="@+id/btn_share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="Share QR Code"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/money" />
+
+    <ImageView
+        android:id="@+id/qr_code_image_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_share" />
+
+
+</android.support.constraint.ConstraintLayout>
