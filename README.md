@@ -1,4 +1,9 @@
 #PromptPayQRCodeDemo
+
+## Develop by
+- Android Studio 3.0 RC 1
+- Kotlin
+
 ## ref
 - https://www.blognone.com/node/95133
 - https://github.com/diewland/promptpay-qr-plus
