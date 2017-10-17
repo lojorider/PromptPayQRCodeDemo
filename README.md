@@ -1,4 +1,4 @@
-#PromptPayQRCodeDemo
+# PromptPayQRCodeDemo
 
 ## Develop by
 - Android Studio 3.0 RC 1
