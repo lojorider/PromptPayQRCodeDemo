@@ -1,6 +1,8 @@
 package com.mojozoft.promptpay_qrcode_demo
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
@@ -18,8 +20,12 @@ import java.util.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+    private var sharedPref: SharedPreferences? = null
     var AUTHORITY_FILEPROVIDER = "com.mojozoft.promptpay_qrcode_demo.fileprovider"
     val QRcodeSize = 1000
+    private val STATE_PP_ID = "STATE_PP_ID"
+    private val STATE_MONEY = "STATE_MONEY"
+    private val STATE_REMARK = "STATE_REMARK"
     private val IMAGE_DIRECTORY = "/MojoQRcodeDemo"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,9 +71,9 @@ class MainActivity : AppCompatActivity() {
                     val stream = FileOutputStream(cachePath.toString() + "/" + random_name) // overwrites this image every time
                     var qrCodeGenerator: QRCodeGenerator? = null
                     qrCodeGenerator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        QRCodeGenerator(prompt_pay_code, QRcodeSize, getColor(R.color.QRcodeBackground), getColor(R.color.QRcodeforeground));
+                        QRCodeGenerator(prompt_pay_code, QRcodeSize, getColor(R.color.QRcodeBackground), getColor(R.color.QRcodeforeground))
                     } else {
-                        QRCodeGenerator(prompt_pay_code, QRcodeSize, resources.getColor(R.color.QRcodeBackground), resources.getColor(R.color.QRcodeforeground));
+                        QRCodeGenerator(prompt_pay_code, QRcodeSize, resources.getColor(R.color.QRcodeBackground), resources.getColor(R.color.QRcodeforeground))
                     }
 
                     compress = qrCodeGenerator.getBitmap()?.compress(Bitmap.CompressFormat.PNG, 100, stream)!!
@@ -97,10 +103,32 @@ class MainActivity : AppCompatActivity() {
     private fun renderQR() {
         val prompt_pay_code = PromptPayCodeGenerator(pp_id.text.toString(), money.text.toString()).getCode()
         val qrCodeGenerator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            QRCodeGenerator(prompt_pay_code, QRcodeSize, getColor(R.color.QRcodeBackground), getColor(R.color.QRcodeforeground));
+            QRCodeGenerator(prompt_pay_code, QRcodeSize, getColor(R.color.QRcodeBackground), getColor(R.color.QRcodeforeground))
         } else {
-            QRCodeGenerator(prompt_pay_code, QRcodeSize, resources.getColor(R.color.QRcodeBackground), resources.getColor(R.color.QRcodeforeground));
+            QRCodeGenerator(prompt_pay_code, QRcodeSize, resources.getColor(R.color.QRcodeBackground), resources.getColor(R.color.QRcodeforeground))
         }
         qr_code_image_view?.setImageBitmap(qrCodeGenerator.getBitmap())
+    }
+
+    private fun restorePref() {
+        sharedPref = getSharedPreferences("SAVE_STATE", Context.MODE_PRIVATE)
+        val prev_pp_id = sharedPref?.getString(STATE_PP_ID, "")
+        val prev_money = sharedPref?.getString(STATE_MONEY, "")
+
+        if (!prev_pp_id!!.isEmpty()) pp_id.setText(prev_pp_id)
+        if (!prev_money!!.isEmpty()) money.setText(prev_money)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        restorePref()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val editor = sharedPref?.edit()
+        editor?.putString(STATE_PP_ID, pp_id.text.toString())
+        editor?.putString(STATE_MONEY, money.text.toString())
+        editor?.apply()
     }
 }
